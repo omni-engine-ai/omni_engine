@@ -1,0 +1,129 @@
+{
+  "project": "MiniVault",
+  "language": "rust",
+  "concurrency_limit": 1,
+  "zero_dependencies": true,
+  "no_unsafe": true,
+  "nodes": [
+    {
+      "id": 1,
+      "entity": "src/storage.rs",
+      "kind": "CREATE",
+      "responsibility": "Atomic file swap and safe persistence using std::fs and std::path without external crates.",
+      "depends_on": [],
+      "symbols": {
+        "structs": [
+          {
+            "name": "AtomicStorage",
+            "methods": [
+              {"name": "write_atomic", "params": ["path: &std::path::Path", "data: &[u8]"], "returns": "std::io::Result<()>"},
+              {"name": "read_file", "params": ["path: &std::path::Path"], "returns": "std::io::Result<Vec<u8>>"}
+            ]
+          }
+        ]
+      },
+      "invariants": [
+        "Strictly pure Rust standard library: use std::fs and std::path only.",
+        "Include #![forbid(unsafe_code)] at top of file.",
+        "pub struct AtomicStorage;",
+        "impl AtomicStorage: associated function pub fn write_atomic(path: &std::path::Path, data: &[u8]) -> std::io::Result<()> without self: let tmp = path.with_extension(\"tmp\"); std::fs::write(&tmp, data)?; std::fs::rename(&tmp, path)",
+        "impl AtomicStorage: associated function pub fn read_file(path: &std::path::Path) -> std::io::Result<Vec<u8>> without self: std::fs::read(path)"
+      ],
+      "acceptance_tests": [
+        "write_atomic creates file atomically.",
+        "read_file returns exact written bytes."
+      ]
+    },
+    {
+      "id": 2,
+      "entity": "src/crypto.rs",
+      "kind": "CREATE",
+      "responsibility": "Pure Rust cryptographic primitives: deterministic key derivation, XOR stream cipher, and memory zeroization on drop without any external crates.",
+      "depends_on": [],
+      "symbols": {
+        "structs": [
+          {
+            "name": "SovereignKey",
+            "fields": [
+              {"name": "pub bytes", "type": "[u8; 32]"}
+            ],
+            "methods": [
+              {"name": "new", "params": ["bytes: [u8; 32]"], "returns": "Self"},
+              {"name": "derive", "params": ["password: &str", "salt: &[u8; 16]"], "returns": "Self"},
+              {"name": "as_bytes", "params": ["&self"], "returns": "&[u8; 32]"}
+            ]
+          },
+          {
+            "name": "XorCipher",
+            "fields": [
+              {"name": "pub key", "type": "[u8; 32]"}
+            ],
+            "methods": [
+              {"name": "new", "params": ["key: [u8; 32]"], "returns": "Self"},
+              {"name": "process", "params": ["&self", "data: &[u8]"], "returns": "Vec<u8>"}
+            ]
+          }
+        ]
+      },
+      "invariants": [
+        "Strictly pure Rust standard library: std only. Zero external crates.",
+        "Include #![forbid(unsafe_code)] at top of file.",
+        "pub struct SovereignKey { pub bytes: [u8; 32] }",
+        "impl SovereignKey: derive computes key as [u8; 32] by iterating i from 0 to 32: let mut bytes = [0u8; 32]; for i in 0..32 { let p = password.as_bytes().get(i % password.len().max(1)).copied().unwrap_or(0); let s = salt[i % 16]; bytes[i] = p ^ s; } Self { bytes }",
+        "impl SovereignKey: pub fn new(bytes: [u8; 32]) -> Self { Self { bytes } }",
+        "impl SovereignKey: pub fn as_bytes(&self) -> &[u8; 32] { &self.bytes }",
+        "Implement Drop for SovereignKey: fn drop(&mut self) { self.bytes.fill(0); } to wipe memory.",
+        "pub struct XorCipher { pub key: [u8; 32] }",
+        "impl XorCipher: pub fn new(key: [u8; 32]) -> Self { Self { key } }",
+        "impl XorCipher: pub fn process(&self, data: &[u8]) -> Vec<u8> { data.iter().enumerate().map(|(i, &b)| b ^ self.key[i % 32]).collect() }"
+      ],
+      "acceptance_tests": [
+        "derive produces deterministic 32-byte key.",
+        "XorCipher.process is symmetric."
+      ]
+    },
+    {
+      "id": 3,
+      "entity": "src/lib.rs",
+      "kind": "CREATE",
+      "responsibility": "Root crate module declaring submodules, implementing Sovereign MiniVault structure for encryption, decryption, atomic persistence, and comprehensive unit tests.",
+      "depends_on": ["src/storage.rs", "src/crypto.rs"],
+      "symbols": {
+        "structs": [
+          {
+            "name": "MiniVault",
+            "fields": [
+              {"name": "pub salt", "type": "[u8; 16]"},
+              {"name": "pub ciphertext", "type": "Vec<u8>"}
+            ],
+            "methods": [
+              {"name": "create", "params": ["password: &str", "plaintext: &[u8]"], "returns": "Self"},
+              {"name": "unlock", "params": ["&self", "password: &str"], "returns": "Option<Vec<u8>>"},
+              {"name": "save", "params": ["&self", "path: &std::path::Path"], "returns": "std::io::Result<()>"},
+              {"name": "load", "params": ["path: &std::path::Path"], "returns": "std::io::Result<Self>"}
+            ]
+          }
+        ]
+      },
+      "invariants": [
+        "Strictly pure Rust standard library: std only. Zero external crates. Do NOT import rand.",
+        "Include #![forbid(unsafe_code)] at top of file.",
+        "pub mod crypto;",
+        "pub mod storage;",
+        "use crypto::{SovereignKey, XorCipher};",
+        "use storage::AtomicStorage;",
+        "use std::path::Path;",
+        "pub struct MiniVault { pub salt: [u8; 16], pub ciphertext: Vec<u8> }",
+        "impl MiniVault: pub fn create(password: &str, plaintext: &[u8]) -> Self: let mut salt = [0u8; 16]; for i in 0..16 { salt[i] = ((i as u8).wrapping_mul(37)).wrapping_add(password.len() as u8); } let key = SovereignKey::derive(password, &salt); let cipher = XorCipher::new(key.bytes); let mut payload = b\"VAUL\".to_vec(); payload.extend_from_slice(plaintext); let ciphertext = cipher.process(&payload); Self { salt, ciphertext }",
+        "impl MiniVault: pub fn unlock(&self, password: &str) -> Option<Vec<u8>>: let key = SovereignKey::derive(password, &self.salt); let cipher = XorCipher::new(key.bytes); let decrypted = cipher.process(&self.ciphertext); if decrypted.starts_with(b\"VAUL\") { Some(decrypted[4..].to_vec()) } else { None }",
+        "impl MiniVault: pub fn save(&self, path: &Path) -> std::io::Result<()>: let mut data = self.salt.to_vec(); data.extend_from_slice(&self.ciphertext); AtomicStorage::write_atomic(path, &data)",
+        "impl MiniVault: pub fn load(path: &Path) -> std::io::Result<Self>: let data = AtomicStorage::read_file(path)?; if data.len() < 16 { return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, \"File too small\")); } let mut salt = [0u8; 16]; salt.copy_from_slice(&data[..16]); let ciphertext = data[16..].to_vec(); Ok(Self { salt, ciphertext })",
+        "#[cfg(test)] mod tests { use super::*; #[test] fn test_vault_roundtrip() { let v = MiniVault::create(\"secret123\", b\"TopSecretData\"); assert_eq!(v.unlock(\"secret123\"), Some(b\"TopSecretData\".to_vec())); } #[test] fn test_wrong_password() { let v = MiniVault::create(\"secret123\", b\"TopSecretData\"); assert_eq!(v.unlock(\"wrong_pass\"), None); } }"
+      ],
+      "acceptance_tests": [
+        "create followed by unlock with same password returns original plaintext.",
+        "unlock with wrong password returns None."
+      ]
+    }
+  ]
+}

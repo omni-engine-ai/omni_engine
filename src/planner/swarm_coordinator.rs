@@ -6381,10 +6381,26 @@ pub fn infer_task_kind(text: &str) -> TaskKind {
 
                         if !fixer_succeeded {
                             println!(
-                                "  [FIXER EXHAUSTED] All 3 attempts exhausted for '{}'. Reverting to pre-fixer baseline for thinker rollback.",
+                                "  [FIXER EXHAUSTED] All 3 attempts exhausted for '{}'. Sovereign Observer engaging Causal AST Purge & Rollback.",
                                 subgoal.target_entity.bright_yellow()
                             );
-                            if let Some(ref pre_bytes) = pre_fixer_code {
+                            if let Some(err_l) = cur_error_line {
+                                if let Some(existing_code) = self.vfs.read_string(&target_path) {
+                                    let l_idx = err_l.saturating_sub(1);
+                                    let cleaned_lines: Vec<&str> = existing_code.lines().take(l_idx).collect();
+                                    let mut purged = cleaned_lines.join("\n");
+                                    let mut opens = 0i32;
+                                    for ch in purged.chars() {
+                                        if ch == '{' { opens += 1; }
+                                        else if ch == '}' { opens -= 1; }
+                                    }
+                                    for _ in 0..opens {
+                                        purged.push_str("\n}");
+                                    }
+                                    self.vfs.write_file(&target_path, purged.as_bytes());
+                                    println!("  [OBSERVER PURGE] Excised unverified block from line {} onwards in '{}' and balanced AST braces.", err_l, subgoal.target_entity.bright_cyan());
+                                }
+                            } else if let Some(ref pre_bytes) = pre_fixer_code {
                                 self.vfs.write_file(&target_path, pre_bytes);
                             }
                             let fixer_audit = format!(

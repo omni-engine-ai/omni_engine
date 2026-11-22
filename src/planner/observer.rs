@@ -262,6 +262,17 @@ impl SovereignObserver {
             }
         }
 
+        // 4. Scope Misplacement Detection (e.g. module or test declared inside impl block)
+        if raw_compiler_output.contains("module is not supported in `trait`s or `impl`s")
+            || raw_compiler_output.contains("consider moving the module out")
+        {
+            let hint = "CRITICAL SCOPE VIOLATION: Inner module or test block was placed inside an `impl` block! Rust strictly forbids `mod` items inside `impl` blocks. Terminate the enclosing `impl` with `}` before the module declaration, and hoist the module to file-level scope.".to_string();
+            guidance_points.push(hint.clone());
+            if !self.global_invariants.contains(&hint) {
+                self.global_invariants.push(hint);
+            }
+        }
+
         if guidance_points.is_empty() {
             guidance_points.push(format!("Resolve direct compiler diagnostic: {}", error_msg));
         }

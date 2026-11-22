@@ -315,6 +315,53 @@ impl CodeFixer {
             }
         }
 
+        // 0a. Sovereign Observer Scope Hoister (Tier 0 - Zero LLM Hallucination):
+        // If rustc detects a module declared inside an impl/trait, hoist the module to file root scope!
+        if raw_compiler_output.contains("module is not supported in `trait`s or `impl`s")
+            || raw_compiler_output.contains("consider moving the module out")
+        {
+            if let Some(err_l) = error_line {
+                let err_idx = err_l.saturating_sub(1);
+                let mut start_idx = err_idx;
+                while start_idx > 0 && lines[start_idx - 1].trim().starts_with("#[") {
+                    start_idx -= 1;
+                }
+
+                let candidate_header = lines[start_idx..].iter().find(|l| l.trim().starts_with("mod ") || l.trim().starts_with("pub mod "));
+                if candidate_header.is_some() {
+                    let before_code = lines[..start_idx].join("\n");
+                    let mut open_braces = 0i32;
+                    for ch in before_code.chars() {
+                        if ch == '{' { open_braces += 1; }
+                        else if ch == '}' { open_braces -= 1; }
+                    }
+
+                    if open_braces > 0 {
+                        let closing_impl = "}".repeat(open_braces as usize);
+                        let mut remaining_code = lines[start_idx..].join("\n");
+
+                        for _ in 0..open_braces {
+                            let trimmed = remaining_code.trim_end();
+                            if trimmed.ends_with('}') {
+                                remaining_code = trimmed[..trimmed.len() - 1].to_string();
+                            }
+                        }
+
+                        let hoisted = format!("{}\n{}\n\n{}", before_code.trim_end(), closing_impl, remaining_code.trim());
+                        vfs.write_file(&path, hoisted.as_bytes());
+                        info!("Sovereign Observer deterministically hoisted nested module to root scope in '{}'", target_file);
+                        return Ok(FixAttemptReport {
+                            success: true,
+                            patch_applied: true,
+                            summary: format!("Sovereign Observer deterministically hoisted nested module to root scope in '{}'", target_file),
+                            target_file: target_file.to_string(),
+                            error_line,
+                        });
+                    }
+                }
+            }
+        }
+
         // 0b. Duplicate declaration excision: if a symbol is defined multiple times at error_line, excise duplicate AST block
         if error_message.contains("defined multiple times") {
             if let Some(err_l) = error_line {
