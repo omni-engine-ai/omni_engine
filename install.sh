@@ -586,7 +586,8 @@ if [ -f "${SHELL_RC}" ]; then
     if ! grep -q ".omni/bin" "${SHELL_RC}"; then
         echo -e "\n# Omni AI Engine" >> "${SHELL_RC}"
         echo "export PATH=\"\${HOME}/.omni/bin:\${PATH}\"" >> "${SHELL_RC}"
-        echo -e "${GREEN}[+] Added ~/.omni/bin to ${SHELL_RC}${RESET}"
+        echo "export LD_LIBRARY_PATH=\"\${HOME}/.omni/bin:\${LD_LIBRARY_PATH}\"" >> "${SHELL_RC}"
+        echo -e "${GREEN}[+] Added ~/.omni/bin to PATH and LD_LIBRARY_PATH in ${SHELL_RC}${RESET}"
     fi
 fi
 
