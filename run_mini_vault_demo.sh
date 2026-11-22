@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_PATH="${SCRIPT_DIR}/bin/omni_engine"
 PLAN_PATH="${SCRIPT_DIR}/examples/mini_vault_maestro_plan.json"
 MODEL_PATH="${SCRIPT_DIR}/models/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf"
-OUTPUT_DIR="/home/hema/Downloads/mini_vault_demo_run"
+OUTPUT_DIR="${HOME}/mini_vault_demo_run"
 
 echo "================================================================================"
 echo "  OMNI ENGINE v2.2.3 - SOVEREIGN OFFLINE GENERATION REHEARSAL"
