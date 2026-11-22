@@ -477,7 +477,7 @@ elif command -v wget >/dev/null 2>&1; then
 fi
 
 if [ -z "${LATEST_TAG}" ]; then
-    LATEST_TAG="v2.2.2"
+    LATEST_TAG="v2.2.3"
     echo -e "${YELLOW}[*] Fallback to current verified release: ${LATEST_TAG}${RESET}"
 else
     echo -e "[+] Latest release available: ${GREEN}${BOLD}${LATEST_TAG}${RESET}"

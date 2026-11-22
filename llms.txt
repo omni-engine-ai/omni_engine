@@ -1,4 +1,4 @@
-# Omni Engine (v2.2.2)
+# Omni Engine (v2.2.3)
 > Sovereign, in-process autonomous software engineering runtime in pure Rust linking `llama.cpp` directly via C-FFI (<6ms latency, 0 cloud tokens), Linux Bubblewrap cleanrooms, and Zero-Wipe AST isolation ($W = \emptyset$).
 
 ## System Context for LLMs

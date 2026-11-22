@@ -11,7 +11,7 @@
 
 [![Rust](https://img.shields.io/badge/Rust-1.80+-orange.svg?logo=rust)](https://www.rust-lang.org)
 [![Interactive Showcase](https://img.shields.io/badge/🌐_Interactive_Landing_Page-Visit_Live-059669?style=for-the-badge&logo=google-chrome&logoColor=white)](https://omni-engine-ai.github.io/omni_engine/)
-[![Release](https://img.shields.io/badge/Release-v2.2.2_(Production_Freeze)-blue.svg?logo=github)](https://github.com/omni-engine-ai/omni_engine/releases/tag/v2.2.2)
+[![Release](https://img.shields.io/badge/Release-v2.2.3_(Production_Stable)-blue.svg?logo=github)](https://github.com/omni-engine-ai/omni_engine/releases/tag/v2.2.3)
 [![Linux Platform](https://img.shields.io/badge/Linux-x86__64%20(Active%20Production)-brightgreen.svg?logo=linux&logoColor=white)](https://github.com/omni-engine-ai/omni_engine/releases/latest)
 [![macOS Platform](https://img.shields.io/badge/macOS-Apple%20Silicon%20(v2.2.2%20Frozen%20Snapshot)-critical.svg?logo=apple&logoColor=white)](https://github.com/omni-engine-ai/omni_engine/releases/tag/v2.2.2)
 [![Windows Platform](https://img.shields.io/badge/Windows-WSL2%20(Supported)-blue.svg?logo=windows&logoColor=white)](#-quickstart-universal-1-line-sovereign-installer)
@@ -39,7 +39,7 @@
 
 ## 📖 Executive Overview
 
-**Omni Engine v2.2.2** is a sovereign, production-grade autonomous software engineering runtime written in Rust. It transforms open-weights Small Language Models (SLMs) and Coder models (3B to 7B) into deterministic, verified software compilers capable of architecting, generating, and stress-testing multi-file systems completely on-device without cloud dependencies, API tokens, or external daemons.
+**Omni Engine v2.2.3** is a sovereign, production-grade autonomous software engineering runtime written in Rust. It transforms open-weights Small Language Models (SLMs) and Coder models (3B to 7B) into deterministic, verified software compilers capable of architecting, generating, and stress-testing multi-file systems completely on-device without cloud dependencies, API tokens, or external daemons.
 
 ### Why Omni Engine?
 
@@ -173,11 +173,11 @@ wsl -e bash -c "curl -fsSL https://raw.githubusercontent.com/omni-engine-ai/omni
 
 ### 📦 Manual Air-Gapped Packages (Offline Environments)
 
-For offline or air-gapped systems without internet access, pre-built standalone archives can be downloaded directly from [GitHub Releases](https://github.com/omni-engine-ai/omni_engine/releases/tag/v2.2.2):
+For offline or air-gapped systems without internet access, pre-built standalone archives can be downloaded directly from [GitHub Releases](https://github.com/omni-engine-ai/omni_engine/releases/tag/v2.2.3):
 
 | Platform | Archive Asset | SHA-256 Checksum |
 | :--- | :--- | :--- |
-| **Linux x86_64 (CPU)** | [`omni_engine_v2.2.2_linux_x86_64.tar.gz`](https://github.com/omni-engine-ai/omni_engine/releases/download/v2.2.2/omni_engine_v2.2.2_linux_x86_64.tar.gz) | [Checksum](https://github.com/omni-engine-ai/omni_engine/releases/download/v2.2.2/omni_engine_v2.2.2_linux_x86_64.tar.gz.sha256) |
+| **Linux x86_64 (CPU)** | [`omni_engine_v2.2.3_linux_x86_64.tar.gz`](https://github.com/omni-engine-ai/omni_engine/releases/download/v2.2.3/omni_engine_v2.2.3_linux_x86_64.tar.gz) | [Checksum](https://github.com/omni-engine-ai/omni_engine/releases/download/v2.2.3/omni_engine_v2.2.3_linux_x86_64.tar.gz.sha256) |
 | **Linux x86_64 (CUDA)** | [`omni_engine_v2.2.2_linux_x86_64_cuda.tar.gz`](https://github.com/omni-engine-ai/omni_engine/releases/download/v2.2.2/omni_engine_v2.2.2_linux_x86_64_cuda.tar.gz) | [Checksum](https://github.com/omni-engine-ai/omni_engine/releases/download/v2.2.2/omni_engine_v2.2.2_linux_x86_64_cuda.tar.gz.sha256) |
 | **macOS Apple Silicon (M1–M4)** | [`omni_engine_v2.2.2_darwin_arm64.tar.gz`](https://github.com/omni-engine-ai/omni_engine/releases/download/v2.2.2/omni_engine_v2.2.2_darwin_arm64.tar.gz) | [Checksum](https://github.com/omni-engine-ai/omni_engine/releases/download/v2.2.2/omni_engine_v2.2.2_darwin_arm64.tar.gz.sha256) |
 
