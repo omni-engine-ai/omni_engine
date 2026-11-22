@@ -555,6 +555,14 @@ elif [ ! -f "${MODEL_PATH}" ]; then
     fi
 fi
 
+# 7b. Official Blueprint Examples
+EXAMPLES_DIR="${INSTALL_DIR}/examples"
+mkdir -p "${EXAMPLES_DIR}"
+echo -e "[*] Installing official reproducible Maestro blueprints to ${EXAMPLES_DIR}..."
+curl -fsSL "https://raw.githubusercontent.com/${REPO}/main/examples/mini_vault_maestro_plan.json" -o "${EXAMPLES_DIR}/mini_vault_maestro_plan.json" 2>/dev/null || true
+curl -fsSL "https://raw.githubusercontent.com/${REPO}/main/run_mini_vault_demo.sh" -o "${INSTALL_DIR}/run_mini_vault_demo.sh" 2>/dev/null || true
+chmod +x "${INSTALL_DIR}/run_mini_vault_demo.sh" 2>/dev/null || true
+
 # 8. Create Wrapper Launcher
 cat << 'EOF' > "${BIN_DIR}/omni"
 #!/usr/bin/env bash
