@@ -26,8 +26,7 @@
         "Strictly pure Rust standard library: use std::fs and std::path only.",
         "Include #![forbid(unsafe_code)] at top of file.",
         "pub struct AtomicStorage;",
-        "impl AtomicStorage: associated function pub fn write_atomic(path: &std::path::Path, data: &[u8]) -> std::io::Result<()> without self: let tmp = path.with_extension(\"tmp\"); std::fs::write(&tmp, data)?; std::fs::rename(&tmp, path)",
-        "impl AtomicStorage: associated function pub fn read_file(path: &std::path::Path) -> std::io::Result<Vec<u8>> without self: std::fs::read(path)"
+        "impl AtomicStorage { pub fn write_atomic(path: &std::path::Path, data: &[u8]) -> std::io::Result<()> { let tmp = path.with_extension(\"tmp\"); std::fs::write(&tmp, data)?; std::fs::rename(&tmp, path) } pub fn read_file(path: &std::path::Path) -> std::io::Result<Vec<u8>> { std::fs::read(path) } }"
       ],
       "acceptance_tests": [
         "write_atomic creates file atomically.",
@@ -69,13 +68,10 @@
         "Strictly pure Rust standard library: std only. Zero external crates.",
         "Include #![forbid(unsafe_code)] at top of file.",
         "pub struct SovereignKey { pub bytes: [u8; 32] }",
-        "impl SovereignKey: derive computes key as [u8; 32] by iterating i from 0 to 32: let mut bytes = [0u8; 32]; for i in 0..32 { let p = password.as_bytes().get(i % password.len().max(1)).copied().unwrap_or(0); let s = salt[i % 16]; bytes[i] = p ^ s; } Self { bytes }",
-        "impl SovereignKey: pub fn new(bytes: [u8; 32]) -> Self { Self { bytes } }",
-        "impl SovereignKey: pub fn as_bytes(&self) -> &[u8; 32] { &self.bytes }",
-        "Implement Drop for SovereignKey: fn drop(&mut self) { self.bytes.fill(0); } to wipe memory.",
+        "impl SovereignKey { pub fn new(bytes: [u8; 32]) -> Self { Self { bytes } } pub fn derive(password: &str, salt: &[u8; 16]) -> Self { let mut bytes = [0u8; 32]; for i in 0..32 { let p = password.as_bytes().get(i % password.len().max(1)).copied().unwrap_or(0); let s = salt[i % 16]; bytes[i] = p ^ s; } Self { bytes } } pub fn as_bytes(&self) -> &[u8; 32] { &self.bytes } }",
+        "impl Drop for SovereignKey { fn drop(&mut self) { self.bytes.fill(0); } }",
         "pub struct XorCipher { pub key: [u8; 32] }",
-        "impl XorCipher: pub fn new(key: [u8; 32]) -> Self { Self { key } }",
-        "impl XorCipher: pub fn process(&self, data: &[u8]) -> Vec<u8> { data.iter().enumerate().map(|(i, &b)| b ^ self.key[i % 32]).collect() }"
+        "impl XorCipher { pub fn new(key: [u8; 32]) -> Self { Self { key } } pub fn process(&self, data: &[u8]) -> Vec<u8> { data.iter().enumerate().map(|(i, &b)| b ^ self.key[i % 32]).collect() } }"
       ],
       "acceptance_tests": [
         "derive produces deterministic 32-byte key.",
