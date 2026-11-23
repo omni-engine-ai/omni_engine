@@ -1,4 +1,4 @@
-# Omni Engine (v2.2.2)
+# Omni Engine (v2.2.3)
 > Sovereign, in-process autonomous software engineering runtime in pure Rust linking `llama.cpp` directly via C-FFI (<6ms latency, 0 cloud tokens), Linux Bubblewrap cleanrooms, and Zero-Wipe AST isolation ($W = \emptyset$).
 
 ## System Context for LLMs
@@ -68,7 +68,7 @@ omni tui
 
 Hardware: Consumer 8-core Dev Node, 8GB DDR4 RAM Floor, 1x Qwen2.5-Coder-1.5B (1.1GB GGUF).
 
-| Metric | Python + HTTP Daemon (Ollama/Aider) | Omni Engine v2.2.2 (Rust In-Process) | Advantage |
+| Metric | Python + HTTP Daemon (Ollama/Aider) | Omni Engine v2.2.3 (Rust In-Process) | Advantage |
 | :--- | :--- | :--- | :--- |
 | **Inference Call Overhead** | 38.4 ms (HTTP JSON ser/de) | **< 5.8 ms** (Direct C-FFI pointer pass) | **-84.9% latency** |
 | **Peak Runtime RSS** | 6,840 MB (Daemons + Python workers) | **2,180 MB** (Shared GGUF + Rust in-process) | **-68.1% memory** |

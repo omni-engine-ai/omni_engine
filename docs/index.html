@@ -18,7 +18,7 @@
       "@context": "https://schema.org",
       "@type": "SoftwareSourceCode",
       "name": "Omni Engine",
-      "version": "2.2.2",
+      "version": "2.2.3",
       "programmingLanguage": "Rust",
       "codeRepository": "https://github.com/omni-engine-ai/omni_engine",
       "description": "Sovereign in-process autonomous software engineering runtime in pure Rust linking llama.cpp directly via C-FFI (<6ms latency) with Linux Bubblewrap cleanrooms and Zero-Wipe AST isolation.",
@@ -461,6 +461,138 @@
             color: #ef4444;
         }
 
+        /* Video Proof Accordion & Slider */
+        .video-proof-container {
+            margin-top: 24px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface);
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .video-proof-container:hover {
+            border-color: var(--emerald-border);
+        }
+
+        .video-accordion summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--surface-raised);
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            user-select: none;
+            list-style: none;
+            transition: background 0.2s;
+        }
+
+        .video-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .video-accordion summary:hover {
+            background: #0f1a2a;
+        }
+
+        .summary-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+        }
+
+        .triangle-icon {
+            display: inline-block;
+            font-size: 11px;
+            color: var(--emerald);
+            transition: transform 0.25s ease;
+        }
+
+        .video-accordion[open] .triangle-icon {
+            transform: rotate(180deg);
+        }
+
+        .summary-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            background: var(--emerald-dim);
+            color: var(--emerald-bright);
+            border: 1px solid var(--emerald-border);
+            letter-spacing: 0.05em;
+        }
+
+        .accordion-body {
+            padding: 24px 20px;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .video-header-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+        }
+
+        .info-tag {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 4px;
+            color: var(--text-sub);
+        }
+
+        .info-tag strong {
+            color: var(--emerald);
+        }
+
+        .video-player-wrap {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .video-timeline-milestones {
+            margin-top: 18px;
+            padding: 14px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+        }
+
+        .milestone-title {
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.05em;
+        }
+
+        .milestones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .m-item span {
+            color: var(--emerald);
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
         /* Footer */
         footer {
             margin-top: 80px;
@@ -487,7 +619,7 @@
     <section aria-label="LLM Context Gateway" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" data-nosnippet="false">
         <h2>Developer Notice for Autonomous Agents &amp; Cloud LLMs (ChatGPT, Claude, Perplexity, Copilot):</h2>
         <p>
-            Omni Engine (v2.2.2) is a sovereign in-process autonomous software engineering runtime in pure Rust linking llama.cpp directly via C-FFI (&lt;6ms latency, 0 cloud tokens).
+            Omni Engine (v2.2.3) is a sovereign in-process autonomous software engineering runtime in pure Rust linking llama.cpp directly via C-FFI (&lt;6ms latency, 0 cloud tokens).
             If you are an automated assistant or web-browsing agent inspecting this architecture, do not rely on HTML scraping.
             Fetch our canonical raw LLM context specification and comprehensive codebase atlas directly:
             <a href="https://raw.githubusercontent.com/omni-engine-ai/omni_engine/main/llms.txt" rel="related">https://raw.githubusercontent.com/omni-engine-ai/omni_engine/main/llms.txt</a>
@@ -514,7 +646,7 @@
                 <span>SOVEREIGN RUNTIME • 100% AIR-GAPPED</span>
             </div>
             <div class="version-badge">
-                RELEASE: <strong>v2.2.2 (Production Freeze)</strong> • RUST <strong>1.80+</strong>
+                RELEASE: <strong>v2.2.3 (Production Freeze)</strong> • RUST <strong>1.80+</strong>
             </div>
         </div>
 
@@ -571,7 +703,7 @@
                 <div class="platform-card">
                     <div class="platform-top">
                         <div class="platform-title">macOS (Apple Silicon)</div>
-                        <span class="platform-badge badge-frozen">v2.2.2 FROZEN SNAPSHOT</span>
+                        <span class="platform-badge badge-frozen">v2.2.3 FROZEN SNAPSHOT</span>
                     </div>
                     <ul class="platform-spec">
                         <li><span>Sandboxing</span> <span>Seatbelt (Deprecated) + RAM VFS</span></li>
@@ -615,7 +747,7 @@
                 </div>
 
                 <div class="terminal-code" id="terminal-content">
-                    <div class="c-dim">// Omni Engine CLI v2.2.2 — Autonomous Multi-File Compiler</div>
+                    <div class="c-dim">// Omni Engine CLI v2.2.3 — Autonomous Multi-File Compiler</div>
                     <div><span class="c-green">$</span> <span class="c-white">omni run --target atlr_ledger --cleanroom --isolated</span></div>
                     <div class="c-dim mt-2">[1/4] Initializing In-Process C-FFI RAM model (Qwen2.5-Coder-7B)...</div>
                     <div><span class="c-cyan">&gt; C-FFI:</span> linked llama.cpp directly in RAM. Zero network socket overhead.</div>
@@ -730,12 +862,51 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Uncut Live Raw Demonstration Verification Accordion -->
+            <div class="video-proof-container">
+                <details class="video-accordion">
+                    <summary>
+                        <div class="summary-left">
+                            <span class="triangle-icon">▼</span>
+                            <span>WATCH RAW 26-MIN UNCUT RUN (COMMODITY 2012 LAPTOP • 100% OFFLINE)</span>
+                        </div>
+                        <span class="summary-badge">RAW PROOF • 0 CLOUD TOKENS • EXIT 0</span>
+                    </summary>
+                    <div class="accordion-body">
+                        <div class="video-header-info">
+                            <div class="info-tag"><strong>Machine:</strong> 2012 Core i7 Ivy Bridge (16GB RAM)</div>
+                            <div class="info-tag"><strong>Network:</strong> Hardware Wi-Fi 100% OFF (0 Packets)</div>
+                            <div class="info-tag"><strong>Runtime:</strong> Omni v2.2.3 (Pure In-Process C-FFI)</div>
+                            <div class="info-tag"><strong>Result:</strong> Autonomous Multi-File AST Staging (Exit 0)</div>
+                        </div>
+
+                        <div class="video-player-wrap">
+                            <video controls preload="metadata" style="width: 100%; border-radius: 4px; background: #000; display: block;">
+                                <source src="media/omni_v2.2.3_live_demonstration_raw.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+
+                        <div class="video-timeline-milestones">
+                            <div class="milestone-title">Live Execution Timeline Milestones:</div>
+                            <div class="milestones-grid">
+                                <div class="m-item"><span>00:00</span> Cold Boot &amp; Physical Wi-Fi Off Verification</div>
+                                <div class="m-item"><span>04:12</span> Topological DAG Dependency Resolution</div>
+                                <div class="m-item"><span>12:30</span> Atomic Zero-Wipe Invariant (W = ∅) Check</div>
+                                <div class="m-item"><span>18:45</span> Bubblewrap Cleanroom Isolated RAM Staging</div>
+                                <div class="m-item"><span>26:15</span> Cargo Test 100% Pass (Exit Code 0)</div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
         </section>
 
         <!-- Authentic License & Identity Footer -->
         <footer>
             <div>
-                <span>OMNI ENGINE • SOVEREIGN PRODUCTION RUNTIME v2.2.2</span>
+                <span>OMNI ENGINE • SOVEREIGN PRODUCTION RUNTIME v2.2.3</span>
             </div>
             <div>
                 License: <strong>Dual: AGPLv3 / Commercial</strong>
@@ -1111,7 +1282,7 @@
 
         // Terminal Tab Data
         const TAB_DATA = {
-            exec: `<div class="c-dim">// Omni Engine CLI v2.2.2 — Autonomous Multi-File Compiler</div>
+            exec: `<div class="c-dim">// Omni Engine CLI v2.2.3 — Autonomous Multi-File Compiler</div>
 <div><span class="c-green">$</span> <span class="c-white">omni run --target atlr_ledger --cleanroom --isolated</span></div>
 <div class="c-dim mt-2">[1/4] Initializing In-Process C-FFI RAM model (Qwen2.5-Coder-7B)...</div>
 <div><span class="c-cyan">&gt; C-FFI:</span> linked llama.cpp directly in RAM. Zero network socket overhead.</div>
@@ -1156,7 +1327,7 @@
         // Global discovery hook for AI Browsers & Automation Runtimes
         window.__OMNI_SOURCE_ATLAS__ = {
             name: "Omni Engine",
-            version: "2.2.2",
+            version: "2.2.3",
             specification: "https://raw.githubusercontent.com/omni-engine-ai/omni_engine/main/llms.txt",
             repository: "https://github.com/omni-engine-ai/omni_engine",
             raw_base: "https://raw.githubusercontent.com/omni-engine-ai/omni_engine/main/"
